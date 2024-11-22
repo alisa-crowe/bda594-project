@@ -5,7 +5,8 @@ from sklearn import tree
 df = pd.read_csv("predictive-modeling/v11NumericIncidentPrediction.csv")
 
 # Define the feature columns and target column
-feature_columns = ["Victim Age", "Overall Race", "Zip Code", "Domestic Violence Incident", "Hour", "Day of Week", "Day of Month", "Month"]
+feature_columns = ["Victim Age", "Overall Race", "Zip Code", "Domestic Violence Incident",
+                   "Hour", "Day of Week", "Day of Month", "Month"]
 target_column = "CIBRS Offense Description"
 
 X, y = df[feature_columns], df[target_column]
