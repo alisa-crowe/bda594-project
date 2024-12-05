@@ -78,16 +78,19 @@
 
     <script>
         async function makePrediction() {
-            const features = {
-                'Victim Age': document.getElementById('victimAge').value,
-                'Overall Race': document.getElementById('overallRace').value,
-                'Zip Code': document.getElementById('zipCode').value,
-                'Hour': document.getElementById('hour').value,
-                'Day of Week': document.getElementById('dayOfWeek').value,
-                'Day of Month': document.getElementById('dayOfMonth').value,
-                'Month': document.getElementById('month').value
-            };
+        const features = {
+            'Victim Age': document.getElementById('victimAge').value,
+            'Overall Race': document.getElementById('overallRace').value,
+            'Zip Code': document.getElementById('zipCode').value,
+            'Hour': document.getElementById('hour').value,
+            'Day of Week': document.getElementById('dayOfWeek').value,
+            'Day of Month': document.getElementById('dayOfMonth').value,
+            'Month': document.getElementById('month').value
+        };
 
+        console.log('Features:', features);
+
+        try {
             const response = await fetch('https://incident-predictor.herokuapp.com/predict', {
                 method: 'POST',
                 headers: {
@@ -96,9 +99,20 @@
                 body: JSON.stringify(features)
             });
 
+            console.log('Response:', response);
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
             const result = await response.json();
+            console.log('Result:', result);
             document.getElementById('result').innerText = `Prediction: ${result.prediction}`;
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('result').innerText = 'Error making prediction';
         }
+    }
     </script>
 </body>
 </html>
