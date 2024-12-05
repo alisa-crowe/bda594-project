@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Incident Prediction</title>
+</head>
+<body>
+    <h1>Enter Incident Details</h1>
+    <form id="predictionForm">
+        <input type="text" id="victimAge" placeholder="Victim Age">
+        <input type="text" id="overallRace" placeholder="Overall Race">
+        <input type="text" id="zipCode" placeholder="Zip Code">
+        <input type="text" id="domesticViolenceIncident" placeholder="Domestic Violence Incident">
+        <input type="text" id="hour" placeholder="Hour">
+        <input type="text" id="dayOfWeek" placeholder="Day of Week">
+        <input type="text" id="dayOfMonth" placeholder="Day of Month">
+        <input type="text" id="month" placeholder="Month">
+        <button type="button" onclick="makePrediction()">Predict</button>
+    </form>
+    <h2 id="result"></h2>
+
+    <script>
+        async function makePrediction() {
+            const features = {
+                'Victim Age': document.getElementById('victimAge').value,
+                'Overall Race': document.getElementById('overallRace').value,
+                'Zip Code': document.getElementById('zipCode').value,
+                'Domestic Violence Incident': document.getElementById('domesticViolenceIncident').value,
+                'Hour': document.getElementById('hour').value,
+                'Day of Week': document.getElementById('dayOfWeek').value,
+                'Day of Month': document.getElementById('dayOfMonth').value,
+                'Month': document.getElementById('month').value
+            };
+
+            const response = await fetch('https://incident-predictor.herokuapp.com/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(features)
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = `Prediction: ${result.prediction}`;
+        }
+    </script>
+</body>
+</html>
