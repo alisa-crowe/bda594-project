@@ -6,12 +6,11 @@ import os
 
 app = Flask(__name__)
 
-# Replace 'https://your-google-sites-domain' with the actual Google Sites URL
-CORS(app, resources={r"/*": {"origins": "https://your-google-sites-domain"}})
+# Allow CORS for all routes (for debugging, later restrict to your domain)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Load the trained model
 model_path = os.path.join(os.path.dirname(__file__), 'decision_tree_model.pkl')
-
 try:
     model = joblib.load(model_path)
 except FileNotFoundError:
