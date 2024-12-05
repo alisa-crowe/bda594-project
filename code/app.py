@@ -31,8 +31,10 @@ day_of_week_map = {
     'SUNDAY': 6
 }
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['OPTIONS', 'POST'])
 def predict():
+    if request.method == 'OPTIONS':
+        return jsonify({'status': 'ok'}), 200
     try:
         data = request.get_json(force=True)
         print('Received data:', data)  # Debugging statement
