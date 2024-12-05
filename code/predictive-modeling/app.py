@@ -5,16 +5,11 @@ import pandas as pd
 import os
 
 app = Flask(__name__)
-
-# Allow CORS for all routes (for debugging, later restrict to your domain)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app)  # Enable CORS globally for all routes
 
 # Load the trained model
 model_path = os.path.join(os.path.dirname(__file__), 'decision_tree_model.pkl')
-try:
-    model = joblib.load(model_path)
-except FileNotFoundError:
-    raise RuntimeError("Model file 'decision_tree_model.pkl' not found. Ensure it exists in the correct location.")
+model = joblib.load(model_path)
 
 # Define mappings
 race_map = {
@@ -38,16 +33,10 @@ day_of_week_map = {
     'SUNDAY': 6
 }
 
-@app.route('/')
-def home():
-    """Root route for app health check."""
-    return "Incident Predictor is Running!"
-
 @app.route('/predict', methods=['POST', 'OPTIONS'])
 def predict():
-    """Route to handle prediction requests."""
+    # Handle preflight OPTIONS request
     if request.method == 'OPTIONS':
-        # Respond to preflight request
         return '', 204
 
     try:
@@ -55,8 +44,8 @@ def predict():
         data = request.get_json(force=True)
 
         # Map categorical values to numerical values
-        data['Overall Race'] = race_map.get(data['Overall Race'].upper(), -1)  # Default to -1 for unknown races
-        data['Day of Week'] = day_of_week_map.get(data['Day of Week'].upper(), -1)  # Default to -1 for unknown days
+        data['Overall Race'] = race_map.get(data['Overall Race'].upper(), -1)
+        data['Day of Week'] = day_of_week_map.get(data['Day of Week'].upper(), -1)
 
         # Validate input
         if -1 in (data['Overall Race'], data['Day of Week']):
@@ -82,7 +71,10 @@ def predict():
         # Handle unexpected errors
         return jsonify({'error': str(e)}), 500
 
+@app.route('/')
+def home():
+    return "Incident Predictor is Running!"
+
 if __name__ == '__main__':
-    # Use Heroku-assigned port for deployment
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5000))  # Use Heroku-assigned port
     app.run(host='0.0.0.0', port=port)
