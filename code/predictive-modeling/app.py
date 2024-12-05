@@ -34,6 +34,11 @@ day_of_week_map = {
 }
 
 @app.route('/predict', methods=['POST', 'OPTIONS'])
+
+@app.route('/')
+def home():
+    return "Incident Predictor is Running!"
+
 def predict():
     if request.method == 'OPTIONS':
         return '', 204  # Handle preflight requests
@@ -71,6 +76,6 @@ def predict():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    # Use dynamic port for Heroku deployment
-    port = int(os.environ.get('PORT', 5000))
+    import os
+    port = int(os.environ.get('PORT', 5000))  # Use Heroku-assigned port
     app.run(host='0.0.0.0', port=port, debug=True)
