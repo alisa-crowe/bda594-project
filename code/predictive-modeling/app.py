@@ -9,7 +9,11 @@ CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS for all routes
 
 # Load the trained model
 model_path = os.path.join(os.path.dirname(__file__), 'decision_tree_model.pkl')
-model = joblib.load(model_path)
+
+try:
+    model = joblib.load(model_path)
+except FileNotFoundError:
+    raise RuntimeError("Model file 'decision_tree_model.pkl' not found. Ensure it exists in the correct location.")
 
 # Define mappings
 race_map = {
@@ -33,13 +37,14 @@ day_of_week_map = {
     'SUNDAY': 6
 }
 
-@app.route('/predict', methods=['POST', 'OPTIONS'])
-
 @app.route('/')
 def home():
+    """Root route for app health check."""
     return "Incident Predictor is Running!"
 
+@app.route('/predict', methods=['POST', 'OPTIONS'])
 def predict():
+    """Route to handle prediction requests."""
     if request.method == 'OPTIONS':
         return '', 204  # Handle preflight requests
 
@@ -76,6 +81,6 @@ def predict():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    import os
-    port = int(os.environ.get('PORT', 5000))  # Use Heroku-assigned port
-    app.run(host='0.0.0.0', port=port, debug=True)
+    # Use Heroku-assigned port for deployment
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
