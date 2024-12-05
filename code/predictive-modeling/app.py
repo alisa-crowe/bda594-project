@@ -6,8 +6,8 @@ import os
 
 app = Flask(__name__)
 
-# Allow CORS for the specific Google Sites domain
-CORS(app, resources={r"/*": {"origins": "https://your-google-sites-domain"}})  # Replace with your actual domain
+# Replace 'https://your-google-sites-domain' with the actual Google Sites URL
+CORS(app, resources={r"/*": {"origins": "https://your-google-sites-domain"}})
 
 # Load the trained model
 model_path = os.path.join(os.path.dirname(__file__), 'decision_tree_model.pkl')
@@ -48,7 +48,8 @@ def home():
 def predict():
     """Route to handle prediction requests."""
     if request.method == 'OPTIONS':
-        return '', 204  # Respond OK to preflight request
+        # Respond to preflight request
+        return '', 204
 
     try:
         # Parse the input JSON
