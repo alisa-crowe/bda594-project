@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import pandas as pd
+import numpy as np
 from sklearn import tree
 
 app = Flask(__name__)

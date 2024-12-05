@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn import tree
+import joblib
 
 # read the data
 df = pd.read_csv("predictive-modeling/v11NumericIncidentPrediction.csv")
@@ -41,18 +42,21 @@ def predict_incident(victim_age, overall_race, zip_code, domestic_violence_incid
     overall_race = race_map[overall_race]
     day_of_week = day_of_week_map[day_of_week]
 
-    # Create a DataFrame for the input values
-    input_data = pd.DataFrame({
-        'Victim Age': [victim_age],
-        'Overall Race': [overall_race],
-        'Zip Code': [zip_code],
-        'Domestic Violence Incident': [domestic_violence_incident],
-        'Hour': [hour],
-        'Day of Week': [day_of_week],
-        'Day of Month': [day_of_month],
-        'Month': [month]
-    })
+    # # Create a DataFrame for the input values
+    # input_data = pd.DataFrame({
+    #     'Victim Age': [victim_age],
+    #     'Overall Race': [overall_race],
+    #     'Zip Code': [zip_code],
+    #     'Domestic Violence Incident': [domestic_violence_incident],
+    #     'Hour': [hour],
+    #     'Day of Week': [day_of_week],
+    #     'Day of Month': [day_of_month],
+    #     'Month': [month]
+    # })
+    #
+    # # Make a prediction
+    # prediction = clf.predict(input_data)
+    # return prediction[0]
 
-    # Make a prediction
-    prediction = clf.predict(input_data)
-    return prediction[0]
+# Save the model
+joblib.dump(clf, 'decision_tree_model.pkl')
