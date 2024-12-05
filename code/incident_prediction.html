@@ -6,14 +6,72 @@
 <body>
     <h1>Enter Incident Details</h1>
     <form id="predictionForm">
-        <input type="text" id="victimAge" placeholder="Victim Age">
-        <input type="text" id="overallRace" placeholder="Overall Race">
-        <input type="text" id="zipCode" placeholder="Zip Code">
-        <input type="text" id="domesticViolenceIncident" placeholder="Domestic Violence Incident">
-        <input type="text" id="hour" placeholder="Hour">
-        <input type="text" id="dayOfWeek" placeholder="Day of Week">
-        <input type="text" id="dayOfMonth" placeholder="Day of Month">
-        <input type="text" id="month" placeholder="Month">
+        <label for="victimAge">Victim Age:</label>
+        <select id="victimAge">
+            <!-- Options for ages 18 to 100 -->
+            <script>
+                for (let i = 18; i <= 100; i++) {
+                    document.write(`<option value="${i}">${i}</option>`);
+                }
+            </script>
+        </select><br>
+
+        <label for="overallRace">Overall Race:</label>
+        <select id="overallRace">
+            <option value="HISPANIC">HISPANIC</option>
+            <option value="WHITE">WHITE</option>
+            <option value="OTHER">OTHER</option>
+            <option value="BLACK">BLACK</option>
+            <option value="ASIAN">ASIAN</option>
+            <option value="UNKNOWN">UNKNOWN</option>
+            <option value="PACIFIC ISLANDER">PACIFIC ISLANDER</option>
+            <option value="AMERICAN INDIAN">AMERICAN INDIAN</option>
+        </select><br>
+
+        <label for="zipCode">Zip Code:</label>
+        <input type="text" id="zipCode" placeholder="Zip Code"><br>
+
+        <label for="hour">Hour:</label>
+        <select id="hour">
+            <!-- Options for hours 0 to 23 -->
+            <script>
+                for (let i = 0; i <= 23; i++) {
+                    document.write(`<option value="${i}">${i}</option>`);
+                }
+            </script>
+        </select><br>
+
+        <label for="dayOfWeek">Day of Week:</label>
+        <select id="dayOfWeek">
+            <option value="MONDAY">MONDAY</option>
+            <option value="TUESDAY">TUESDAY</option>
+            <option value="WEDNESDAY">WEDNESDAY</option>
+            <option value="THURSDAY">THURSDAY</option>
+            <option value="FRIDAY">FRIDAY</option>
+            <option value="SATURDAY">SATURDAY</option>
+            <option value="SUNDAY">SUNDAY</option>
+        </select><br>
+
+        <label for="dayOfMonth">Day of Month:</label>
+        <select id="dayOfMonth">
+            <!-- Options for days 1 to 31 -->
+            <script>
+                for (let i = 1; i <= 31; i++) {
+                    document.write(`<option value="${i}">${i}</option>`);
+                }
+            </script>
+        </select><br>
+
+        <label for="month">Month:</label>
+        <select id="month">
+            <!-- Options for months 1 to 12 -->
+            <script>
+                for (let i = 1; i <= 12; i++) {
+                    document.write(`<option value="${i}">${i}</option>`);
+                }
+            </script>
+        </select><br>
+
         <button type="button" onclick="makePrediction()">Predict</button>
     </form>
     <h2 id="result"></h2>
@@ -24,7 +82,6 @@
                 'Victim Age': document.getElementById('victimAge').value,
                 'Overall Race': document.getElementById('overallRace').value,
                 'Zip Code': document.getElementById('zipCode').value,
-                'Domestic Violence Incident': document.getElementById('domesticViolenceIncident').value,
                 'Hour': document.getElementById('hour').value,
                 'Day of Week': document.getElementById('dayOfWeek').value,
                 'Day of Month': document.getElementById('dayOfMonth').value,
