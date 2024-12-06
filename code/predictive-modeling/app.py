@@ -10,11 +10,11 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Load the trained model
-model_path = os.path.join(os.path.dirname(__file__), 'decision_tree_model.pkl')
+model_path = os.path.join(os.path.dirname(__file__), 'incident_prediction_model_compressed.pkl')  # Updated to compressed model
 try:
     model = joblib.load(model_path)
 except FileNotFoundError:
-    raise RuntimeError("Model file 'decision_tree_model.pkl' not found. Ensure it exists in the correct location.")
+    raise RuntimeError(f"Model file '{model_path}' not found. Ensure it exists in the correct location.")
 
 # Define mappings
 race_map = {
