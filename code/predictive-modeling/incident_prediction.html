@@ -28,9 +28,6 @@
             <option value="AMERICAN INDIAN">AMERICAN INDIAN</option>
         </select><br>
 
-        <label for="zipCode">Zip Code:</label>
-        <input type="number" id="zipCode" placeholder="Zip Code" required min="10000" max="99999"><br>
-
         <label for="hour">Hour:</label>
         <select id="hour" required>
             <!-- Options for hours 0 to 23 -->
@@ -64,12 +61,28 @@
 
         <label for="month">Month:</label>
         <select id="month" required>
-            <!-- Options for months 1 to 12 -->
-            <script>
-                for (let i = 1; i <= 12; i++) {
-                    document.write(`<option value="${i}">${i}</option>`);
-                }
-            </script>
+            <option value="1">JANUARY</option>
+            <option value="2">FEBRUARY</option>
+            <option value="3">MARCH</option>
+            <option value="4">APRIL</option>
+            <option value="5">MAY</option>
+            <option value="6">JUNE</option>
+            <option value="7">JULY</option>
+            <option value="8">AUGUST</option>
+            <option value="9">SEPTEMBER</option>
+            <option value="10">OCTOBER</option>
+            <option value="11">NOVEMBER</option>
+            <option value="12">DECEMBER</option>
+        </select><br>
+
+        <label for="hhsaRegion">HHSA Region:</label>
+        <select id="hhsaRegion" required>
+            <option value="CENTRAL">CENTRAL</option>
+            <option value="EAST">EAST</option>
+            <option value="NORTH CENTRAL">NORTH CENTRAL</option>
+            <option value="NORTH COASTAL">NORTH COASTAL</option>
+            <option value="NORTH INLAND">NORTH INLAND</option>
+            <option value="SOUTH">SOUTH</option>
         </select><br>
 
         <button type="button" onclick="makePrediction()">Predict</button>
@@ -82,14 +95,12 @@
             const features = {
                 'Victim Age': document.getElementById('victimAge').value,
                 'Overall Race': document.getElementById('overallRace').value,
-                'Zip Code': document.getElementById('zipCode').value,
                 'Hour': document.getElementById('hour').value,
                 'Day of Week': document.getElementById('dayOfWeek').value,
                 'Day of Month': document.getElementById('dayOfMonth').value,
-                'Month': document.getElementById('month').value
+                'Month': document.getElementById('month').value,
+                'HHSA Region': document.getElementById('hhsaRegion').value
             };
-
-            console.log('Features:', features);
 
             try {
                 // Send a POST request to the backend
@@ -101,15 +112,12 @@
                     body: JSON.stringify(features)
                 });
 
-                console.log('Response:', response);
-
                 // Check if the response was successful
                 if (!response.ok) {
                     throw new Error(`Network response was not ok: ${response.statusText}`);
                 }
 
                 const result = await response.json();
-                console.log('Result:', result);
 
                 // Display the prediction
                 if (result.prediction) {
