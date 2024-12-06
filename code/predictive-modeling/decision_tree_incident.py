@@ -1,6 +1,8 @@
 import pandas as pd
 from sklearn import tree
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import joblib
 
 # Read the data
 df = pd.read_csv("v11NumericIncidentPrediction.csv")
@@ -47,7 +49,29 @@ clf = tree.DecisionTreeClassifier()
 clf = clf.fit(X_train, y_train)
 
 # Save the updated model
-import joblib
 joblib.dump(clf, 'decision_tree_model.pkl')
 
-print("Model training complete. Saved as 'decision_tree_model.pkl'.")
+# Evaluate the model
+y_pred = clf.predict(X_test)
+
+# Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+
+# Classification report
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+# Confusion Matrix
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+# Optional: Save the performance metrics
+with open("model_evaluation.txt", "w") as f:
+    f.write(f"Accuracy: {accuracy:.2f}\n")
+    f.write("\nClassification Report:\n")
+    f.write(classification_report(y_test, y_pred))
+    f.write("\nConfusion Matrix:\n")
+    f.write(str(confusion_matrix(y_test, y_pred)))
+
+print("Evaluation metrics saved to 'model_evaluation.txt'.")
