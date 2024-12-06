@@ -6,6 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
+import joblib
 
 
 # Step 2: Load the Data
@@ -88,3 +89,6 @@ plt.title('Feature Importances in Random Forest Model')
 plt.xlabel('Importance')
 plt.ylabel('Features')
 plt.show()
+
+compressed_model_path = 'domestic_violence_model_compressed.pkl'
+joblib.dump(weighted_model, compressed_model_path, compress=3)
