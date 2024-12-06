@@ -30,8 +30,8 @@ for col in categorical_columns:
 df['Domestic Violence Incident'] = df['Domestic Violence Incident'].astype(int)
 
 
-# Step 4: Feature Selection
-features = ['Agency', 'CIBRS Offense Code', 'Victim Age', 'Overall Race', 'City', 'Zip Code', 'Hour', 'Day of Week', 'Month']
+## Step 4: Feature Selection
+features = ['Victim Age', 'Overall Race', 'City', 'Zip Code', 'Hour', 'Day of Week', 'Month']
 X = df[features]
 y = df['Domestic Violence Incident']
 
