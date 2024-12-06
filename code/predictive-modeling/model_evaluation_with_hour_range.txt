@@ -1,0 +1,25 @@
+Accuracy: 0.42
+
+Classification Report:
+                      precision    recall  f1-score   support
+
+  Aggravated Assault       0.23      0.26      0.24      2442
+   Forcible Fondling       0.05      0.06      0.05       255
+       Forcible Rape       0.04      0.04      0.04       345
+        Intimidation       0.09      0.11      0.10       705
+Kidnapping/Abduction       0.01      0.02      0.02       347
+               Other       0.01      0.02      0.02       100
+      Simple Assault       0.63      0.56      0.60      6742
+
+            accuracy                           0.42     10936
+           macro avg       0.15      0.15      0.15     10936
+        weighted avg       0.45      0.42      0.43     10936
+
+Confusion Matrix:
+[[ 626   73   81  172  162   29 1299]
+ [  53   16    9   22   15    4  136]
+ [  79   17   15   19   20   20  175]
+ [ 168   24   12   75   31    9  386]
+ [ 117   11    6   23    7    1  182]
+ [  17    0   15    4    6    2   56]
+ [1650  186  226  486  314   72 3808]]
