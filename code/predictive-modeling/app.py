@@ -16,6 +16,13 @@ try:
 except FileNotFoundError:
     raise RuntimeError(f"Model file '{model_path}' not found. Ensure it exists in the correct location.")
 
+# Load the city label encoder used during training
+city_encoder_path = os.path.join(os.path.dirname(__file__), 'city_label_encoder.pkl')
+try:
+    city_label_encoder = joblib.load(city_encoder_path)
+except FileNotFoundError:
+    raise RuntimeError(f"City label encoder file '{city_encoder_path}' not found. Ensure it exists in the correct location.")
+
 # Define mappings
 race_map = {
     'HISPANIC': 0,
@@ -57,6 +64,10 @@ def predict():
         # Map categorical values to numerical values
         data['Overall Race'] = race_map.get(data['Overall Race'].upper(), -1)  # Default to -1 for unknown races
         data['Day of Week'] = day_of_week_map.get(data['Day of Week'].upper(), -1)  # Default to -1 for unknown days
+        try:
+            data['City'] = city_label_encoder.transform([data['City']])[0]
+        except ValueError:
+            return jsonify({'error': 'Invalid city name'}), 400
 
         # Validate input
         if -1 in (data['Overall Race'], data['Day of Week']):
@@ -66,7 +77,7 @@ def predict():
         input_data = pd.DataFrame({
             'Victim Age': [data['Victim Age']],
             'Overall Race': [data['Overall Race']],
-            'Zip Code': [data['Zip Code']],
+            'City': [data['City']],
             'Hour': [data['Hour']],
             'Day of Week': [data['Day of Week']],
             'Day of Month': [data['Day of Month']],
