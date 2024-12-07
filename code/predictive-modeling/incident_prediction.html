@@ -197,22 +197,12 @@
 
                 const result = await response.json();
 
-                if (result.prediction) {
-                    // Display the prediction
-                    let output = `Prediction: ${result.prediction}`;
-
-                    // Display the probabilities
-                    if (result.probabilities) {
-                        const probabilities = Object.entries(result.probabilities)
-                            .map(([classLabel, prob]) => `Class ${classLabel}: ${prob.toFixed(2) * 100}%`)
-                            .join('<br>'); // Format as percentages
-
-                        output += `<br>Probabilities:<br>${probabilities}`;
-                    }
-
-                    document.getElementById('result').innerHTML = output; // Use innerHTML for HTML formatting
+                if (result.prediction && result.probability !== undefined) {
+                    // Display the prediction and its associated probability as a decimal
+                    document.getElementById('result').innerText =
+                        `Prediction: ${result.prediction}\nProbability: ${result.probability.toFixed(2)}`;
                 } else {
-                    document.getElementById('result').innerText = 'No prediction returned.';
+                    document.getElementById('result').innerText = 'No prediction or probability returned.';
                 }
             } catch (error) {
                 document.getElementById('result').innerText = `Error making prediction: ${error.message}`;

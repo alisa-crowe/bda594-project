@@ -52,28 +52,23 @@ def home():
 
 @app.route('/predict', methods=['POST', 'OPTIONS'])
 def predict():
-    """Route to handle prediction requests."""
     if request.method == 'OPTIONS':
-        # Respond to preflight request
         return '', 204
 
     try:
-        # Parse the input JSON
         data = request.get_json(force=True)
 
-        # Map categorical values to numerical values
-        data['Overall Race'] = race_map.get(data['Overall Race'].upper(), -1)  # Default to -1 for unknown races
-        data['Day of Week'] = day_of_week_map.get(data['Day of Week'].upper(), -1)  # Default to -1 for unknown days
+        # Map and validate inputs (same as before)
+        data['Overall Race'] = race_map.get(data['Overall Race'].upper(), -1)
+        data['Day of Week'] = day_of_week_map.get(data['Day of Week'].upper(), -1)
         try:
             data['City'] = city_label_encoder.transform([data['City']])[0]
         except ValueError:
             return jsonify({'error': 'Invalid city name'}), 400
 
-        # Validate input
         if -1 in (data['Overall Race'], data['Day of Week']):
             return jsonify({'error': 'Invalid categorical input values'}), 400
 
-        # Create a DataFrame for the input
         input_data = pd.DataFrame({
             'Victim Age': [data['Victim Age']],
             'Overall Race': [data['Overall Race']],
@@ -84,24 +79,17 @@ def predict():
             'Month': [data['Month']]
         })
 
-        # Predict the outcome
-        prediction = model.predict(input_data)
+        # Make prediction
+        prediction = model.predict(input_data)[0]
+        probability = model.predict_proba(input_data)[0][prediction]
 
-        # Get prediction probabilities
-        probabilities = model.predict_proba(input_data)
+        # Return prediction and probability as a decimal
+        return jsonify({
+            'prediction': prediction,
+            'probability': float(probability)  # Already in decimal form
+        })
 
-        # Create response with prediction and probabilities
-        response = {
-            'prediction': prediction[0],  # The predicted class
-            'probabilities': {  # Probabilities for each class
-                str(idx): prob for idx, prob in enumerate(probabilities[0])
-            }
-        }
-
-        # Return the response
-        return jsonify(response)
     except Exception as e:
-        # Handle unexpected errors
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
