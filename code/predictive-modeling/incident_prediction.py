@@ -19,6 +19,9 @@ target_column = "CIBRS Offense Description"
 label_encoder = LabelEncoder()
 df["City"] = label_encoder.fit_transform(df["City"])
 
+# Save the LabelEncoder for later use
+joblib.dump(label_encoder, 'city_label_encoder.pkl')
+
 # Split the data into features and target
 X = df[feature_columns]
 y = df[target_column]
