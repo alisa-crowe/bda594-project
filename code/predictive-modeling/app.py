@@ -10,14 +10,14 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Load the trained model
-model_path = os.path.join(os.path.dirname(__file__), 'incident_prediction_model_compressed.pkl')  # Updated to compressed model
+model_path = os.path.join(os.path.dirname(__file__), 'incident_prediction_model_compressed.pkl')
 try:
     model = joblib.load(model_path)
 except FileNotFoundError:
     raise RuntimeError(f"Model file '{model_path}' not found. Ensure it exists in the correct location.")
 
 # Load the city label encoder used during training
-city_encoder_path = 'city_label_encoder.pkl'
+city_encoder_path = os.path.join(os.path.dirname(__file__), 'city_label_encoder.pkl')
 try:
     city_label_encoder = joblib.load(city_encoder_path)
 except FileNotFoundError:
