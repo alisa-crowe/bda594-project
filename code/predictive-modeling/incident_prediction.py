@@ -54,6 +54,51 @@ plt.ylabel("True Labels")
 plt.xlabel("Predicted Labels")
 plt.show()
 
+# Feature Importance Chart
+# Extract raw feature importance
+feature_importances = rf_clf.feature_importances_
+feature_names = feature_columns
+
+# Create a DataFrame for feature importance
+importance_df = pd.DataFrame({'Feature': feature_names, 'Importance': feature_importances})
+
+# Group features for categorical encodings
+grouped_features = {
+    'Day of Week': ['Day of Week'],
+    'Month': ['Month'],
+    'Victim Age': ['Victim Age'],
+    'Overall Race': ['Overall Race'],
+    'City': ['City'],
+    'Hour': ['Hour'],
+    'Day of Month': ['Day of Month']
+}
+
+# Sum importance scores for grouped features
+grouped_importance = {}
+for group, columns in grouped_features.items():
+    grouped_importance[group] = importance_df[importance_df['Feature'].isin(columns)]['Importance'].sum()
+
+# Convert to DataFrame for plotting
+grouped_importance_df = pd.DataFrame(list(grouped_importance.items()), columns=['Feature Group', 'Total Importance'])
+
+# Sort by importance
+grouped_importance_df = grouped_importance_df.sort_values(by='Total Importance', ascending=False)
+
+# Plot the feature importance (vertical bars)
+plt.figure(figsize=(10, 8))
+sns.barplot(
+    y='Total Importance',
+    x='Feature Group',
+    data=grouped_importance_df,
+    palette='viridis'
+)
+plt.title("Feature Importance")
+plt.ylabel("Importance")
+plt.xlabel("Feature Group")
+plt.xticks(rotation=45, ha="right")  # Tilt feature group names for better readability
+plt.tight_layout()
+plt.show()
+
 # Save the trained model with compression
 compressed_model_path = 'incident_prediction_model_compressed.pkl'
 joblib.dump(rf_clf, compressed_model_path, compress=3)
