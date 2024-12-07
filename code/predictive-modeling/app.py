@@ -50,25 +50,31 @@ def home():
     """Root route for app health check."""
     return "Incident Predictor is Running!"
 
+
 @app.route('/predict', methods=['POST', 'OPTIONS'])
 def predict():
     if request.method == 'OPTIONS':
         return '', 204
-
     try:
+        # Parse the input JSON
         data = request.get_json(force=True)
+        app.logger.info(f"Received data: {data}")  # Log input data
 
-        # Map and validate inputs (same as before)
+        # Map categorical values
         data['Overall Race'] = race_map.get(data['Overall Race'].upper(), -1)
         data['Day of Week'] = day_of_week_map.get(data['Day of Week'].upper(), -1)
+
+        # Encode the city using the label encoder
         try:
             data['City'] = city_label_encoder.transform([data['City']])[0]
-        except ValueError:
-            return jsonify({'error': 'Invalid city name'}), 400
+        except ValueError as e:
+            return jsonify({'error': f"City encoding error: {str(e)}"}), 400
 
+        # Validate the input
         if -1 in (data['Overall Race'], data['Day of Week']):
             return jsonify({'error': 'Invalid categorical input values'}), 400
 
+        # Prepare input for prediction
         input_data = pd.DataFrame({
             'Victim Age': [data['Victim Age']],
             'Overall Race': [data['Overall Race']],
@@ -78,19 +84,21 @@ def predict():
             'Day of Month': [data['Day of Month']],
             'Month': [data['Month']]
         })
+        app.logger.info(f"Input DataFrame: {input_data}")  # Log input DataFrame
 
-        # Make prediction
-        prediction = model.predict(input_data)[0]
-        probability = model.predict_proba(input_data)[0][prediction]
+        # Predict
+        prediction = model.predict(input_data)
+        probability = model.predict_proba(input_data).max(axis=1)[0]
 
-        # Return prediction and probability as a decimal
+        # Return the prediction and probability
         return jsonify({
-            'prediction': prediction,
-            'probability': float(probability)  # Already in decimal form
+            'prediction': prediction[0],
+            'probability': probability
         })
-
     except Exception as e:
+        app.logger.error(f"Error occurred: {str(e)}")  # Log error
         return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     # Use Heroku-assigned port for deployment
