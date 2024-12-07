@@ -1,0 +1,14 @@
+# Ignore datasets and unused files
+*.csv
+*.pkl
+*.log
+
+# Ignore virtual environments
+venv/
+.venv/
+env/
+
+# Ignore other development-related files
+*.ipynb
+.pytest_cache/
+__pycache__/
