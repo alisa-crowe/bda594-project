@@ -1,1 +1,1 @@
-web: python code/predictive-modeling/app.py
+web: python app.py
