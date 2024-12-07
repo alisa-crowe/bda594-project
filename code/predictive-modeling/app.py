@@ -87,8 +87,19 @@ def predict():
         # Predict the outcome
         prediction = model.predict(input_data)
 
-        # Return the prediction
-        return jsonify({'prediction': prediction[0]})
+        # Get prediction probabilities
+        probabilities = model.predict_proba(input_data)
+
+        # Create response with prediction and probabilities
+        response = {
+            'prediction': prediction[0],  # The predicted class
+            'probabilities': {  # Probabilities for each class
+                str(idx): prob for idx, prob in enumerate(probabilities[0])
+            }
+        }
+
+        # Return the response
+        return jsonify(response)
     except Exception as e:
         # Handle unexpected errors
         return jsonify({'error': str(e)}), 500
