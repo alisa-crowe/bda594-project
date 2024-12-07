@@ -5,14 +5,19 @@ from sklearn.metrics import classification_report, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-import joblib  # Ensure this is imported for saving the model
+import joblib  # For saving the model
+from sklearn.preprocessing import LabelEncoder  # For encoding categorical data
 
 # Read the data
 df = pd.read_csv("v11NumericIncidentPrediction.csv")  # Update this path if needed
 
-# Define the feature columns and target column
-feature_columns = ["Victim Age", "Overall Race", "Zip Code", "Hour", "Day of Week", "Day of Month", "Month"]
+# Ensure that "City" is used instead of "Zip Code"
+feature_columns = ["Victim Age", "Overall Race", "City", "Hour", "Day of Week", "Day of Month", "Month"]
 target_column = "CIBRS Offense Description"
+
+# Encode the "City" column as it is categorical
+label_encoder = LabelEncoder()
+df["City"] = label_encoder.fit_transform(df["City"])
 
 # Split the data into features and target
 X = df[feature_columns]
