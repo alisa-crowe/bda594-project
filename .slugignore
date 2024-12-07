@@ -1,6 +1,5 @@
 # Ignore datasets and unused files
 *.csv
-*.pkl
 *.log
 
 # Ignore virtual environments
